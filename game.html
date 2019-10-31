@@ -8,10 +8,78 @@
     <style>
       #screen {
         border: 1px solid #ccc;
+        margin: auto;
+        display: flex;
       }
     </style>
   </head>
   <body>
-    <canvas id="screen" height="500" width="500"></canvas>
+    <canvas id="screen"></canvas>
+    <script>
+      const canvDimensions = {
+        x: 400,
+        y: 600,
+        cols: 8,
+        lines: 12
+      };
+
+      const screen = document.getElementById("screen");
+      screen.height = canvDimensions.y;
+      screen.width = canvDimensions.x;
+      const canvas = screen.getContext("2d");
+
+      const game = {
+        board: {
+          colW: canvDimensions.x / canvDimensions.cols,
+          lineH: canvDimensions.y / canvDimensions.lines
+        },
+        players: {
+          p1: { x: 10, y: 40, color: "#0F0" },
+          p2: { x: 100, y: 408, color: "#FF0" },
+          p3: { x: 110, y: 420, color: "#0FF" },
+          p4: { x: 310, y: 340, color: "#F0F" }
+        }
+      };
+
+      const color = "#F00";
+      const posX = 0;
+      const posY = 0;
+      const width = 250;
+      const height = 250;
+
+      renderScreen();
+
+      function renderScreen() {
+        canvas.fillStyle = "white";
+        canvas.fillRect(0, 0, canvDimensions.x, canvDimensions.y);
+
+        game.board.lineH = canvDimensions.y / canvDimensions.lines;
+        game.board.colW = canvDimensions.x / canvDimensions.cols;
+
+        for (i = 1; i <= canvDimensions.cols; i++) {
+          canvas.strokeStyle = "#CCC";
+          canvas.beginPath();
+          canvas.moveTo(i * game.board.colW, 0);
+          canvas.lineTo(i * game.board.colW, canvDimensions.y);
+          canvas.stroke();
+        }
+        for (i = 1; i <= canvDimensions.lines; i++) {
+          canvas.strokeStyle = "#CCC";
+          canvas.beginPath();
+          canvas.moveTo(0, i * game.board.lineH);
+          canvas.lineTo(canvDimensions.x, i * game.board.lineH);
+          canvas.stroke();
+        }
+
+        for (p in game.players) {
+          const player = game.players[p];
+          canvas.fillStyle = player.color;
+          canvas.fillRect(player.x, player.y, 5, 5);
+          console.log(player.x, player.y, player.color);
+        }
+
+        requestAnimationFrame(renderScreen);
+      }
+    </script>
   </body>
 </html>
